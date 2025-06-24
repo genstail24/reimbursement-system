@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Enums\ReimbursementStatusEnum;
 use App\Http\Controllers\Controller;
 use App\Models\Reimbursement;
 use Illuminate\Http\Request;
@@ -38,6 +39,7 @@ class ReimbursementController extends Controller
                 'description' => 'nullable|string',
                 'amount'      => 'required|numeric|min:0',
                 'category_id' => 'required|exists:categories,id',
+                'attachment'  => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
             ]);
 
             // limit per per month
@@ -58,14 +60,21 @@ class ReimbursementController extends Controller
                 ], 'Reimbursement exceeds monthly limit for this category.');
             }
 
+            // upload file attachment 
+            $filePath = null;
+            if ($request->hasFile('attachment')) {
+                $filePath = $request->file('attachment')->store('attachments', 'public');
+            }
+
             $reimbursement = Reimbursement::create([
-                'user_id'     => Auth::id(),
-                'title'       => $validated['title'],
-                'description' => $validated['description'] ?? null,
-                'amount'      => $validated['amount'],
-                'category_id' => $validated['category_id'],
-                'submitted_at'=> now(),
-                'status'      => 'pending',
+                'user_id'             => Auth::id(),
+                'title'               => $validated['title'],
+                'description'         => $validated['description'] ?? null,
+                'amount'              => $validated['amount'],
+                'category_id'         => $validated['category_id'],
+                'submitted_at'        => now(),
+                'status'              => ReimbursementStatusEnum::PENDING,
+                'attachment_path'=> $filePath,
             ]);
 
             activity()
@@ -96,7 +105,10 @@ class ReimbursementController extends Controller
                 'description' => 'nullable|string',
                 'amount'      => 'sometimes|numeric|min:0',
                 'category_id' => 'sometimes|exists:categories,id',
-                'status'      => ['required', Rule::in(['approved', 'rejected'])],
+                'status'      => ['required', Rule::in([
+                    ReimbursementStatusEnum::APPROVED->value,
+                    ReimbursementStatusEnum::REJECTED->value,
+                ])],
             ]);
 
             $reimbursement->fill($validated);
