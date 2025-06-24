@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\ReimbursementStatusEnum;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -19,6 +20,10 @@ class Reimbursement extends Model
         'attachment_path',
         'submitted_at',
         'approved_at'
+    ];
+
+    protected $casts = [
+        'status' => ReimbursementStatusEnum::class,
     ];
 
     public function user()
