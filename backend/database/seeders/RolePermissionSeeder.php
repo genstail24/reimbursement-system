@@ -44,6 +44,9 @@ class RolePermissionSeeder extends Seeder
             'permission.view',
             'permission.update',
             'permission.delete',
+
+            // Log Activities
+            'activity-log.view'
         ];
         foreach ($permissions as $perm) {
             Permission::firstOrCreate(['name' => $perm]);

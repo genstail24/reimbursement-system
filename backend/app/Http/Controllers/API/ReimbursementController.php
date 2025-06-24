@@ -43,6 +43,12 @@ class ReimbursementController extends Controller
                 'status'      => 'pending',
             ]);
 
+            activity()
+                ->performedOn($reimbursement)
+                ->causedBy(Auth::user())
+                ->withProperties(['action' => 'submitted'])
+                ->log('Reimbursement submission');
+
             return $this->response()->created($reimbursement, 'Reimbursement submitted successfully.');
         } catch (\Throwable $e) {
             return $this->response()->error($request, $e);
@@ -71,6 +77,12 @@ class ReimbursementController extends Controller
 
             $reimbursement->status = $validated['status'];
             $reimbursement->save();
+
+            activity()
+                ->performedOn($reimbursement)
+                ->causedBy(Auth::user())
+                ->withProperties(['action' => $validated['status']])
+                ->log("Reimbursement {$validated['status']}");
 
             $action = $validated['status'] === 'approved' ? 'approved' : 'rejected';
             return $this->response()->success($reimbursement, "Reimbursement {$action} successfully.");

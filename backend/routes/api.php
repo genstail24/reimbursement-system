@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\ActivityLogController;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\CategoryController;
 use App\Http\Controllers\API\PermissionController;
@@ -84,6 +85,12 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::middleware('permission:permission.create')->post('/', [PermissionController::class, 'store']);
         Route::middleware('permission:permission.update')->put('{permission}', [PermissionController::class, 'update']);
         Route::middleware('permission:permission.delete')->delete('{permission}', [PermissionController::class, 'destroy']);
+    });
+
+    // /log-activities
+    Route::prefix('activity-logs')->group(function () {
+        Route::middleware('permission:activity-log.view')->get('/', [ActivityLogController::class, 'index']);
+        Route::middleware('permission:activity-log.view')->get('{id}', [ActivityLogController::class, 'show']);
     });
 
 });
