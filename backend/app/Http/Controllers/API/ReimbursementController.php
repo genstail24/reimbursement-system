@@ -8,6 +8,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 use App\Helpers\HTTPResponse;
+use App\Mail\NewReimbursementSubmission;
+use App\Models\Category;
+use App\Models\User;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Mail;
 
 class ReimbursementController extends Controller
 {
@@ -32,6 +37,24 @@ class ReimbursementController extends Controller
                 'amount'      => 'required|numeric|min:0',
                 'category_id' => 'required|exists:categories,id',
             ]);
+
+            // limit per per month
+            $category = Category::findOrFail($validated['category_id']);
+            $limit = $category->limit_per_month;
+
+            $currentMonth = Carbon::now()->startOfMonth();
+            $totalUsed = Reimbursement::where('user_id', Auth::id())
+                ->where('category_id', $validated['category_id'])
+                ->whereBetween('submitted_at', [$currentMonth, now()])
+                ->sum('amount');
+
+            if (($totalUsed + $validated['amount']) > $limit) {
+                return $this->response()->validation([
+                    'limit'     => $limit,
+                    'used'      => $totalUsed,
+                    'remaining' => max(0, $limit - $totalUsed)
+                ], 'Reimbursement exceeds monthly limit for this category.');
+            }
 
             $reimbursement = Reimbursement::create([
                 'user_id'     => Auth::id(),
