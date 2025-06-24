@@ -12,40 +12,31 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $credentials = $request->validate([
-            'email' => 'required|email',
+            'email'    => 'required|email',
             'password' => 'required',
         ]);
 
-        if (!Auth::attempt($credentials)) {
-            return response()->json(['message' => 'Unauthorized'], 401);
+        if (! Auth::attempt($credentials)) {
+            return $this->response()->failed([], 'Unauthorized');
         }
 
-        $user = Auth::user();
+        $user  = Auth::user();
         $token = $user->createToken('api-token')->plainTextToken;
 
-        return response()->json([
-            'message' => "Login Success",
-            'data' => [
-                'token' => $token, 
-                'user' => $user,
-            ],
-        ]);
+        return $this->response()->success([
+            'token' => $token,
+            'user'  => $user,
+        ], 'Login Success');
     }
 
     public function user(Request $request)
     {
-        return response()->json([
-            'message' => "Get logged in user",
-            'data' => $request->user(),
-        ]);
+        return $this->response()->success($request->user(), 'Get logged in user');
     }
 
     public function logout(Request $request)
     {
         $request->user()->currentAccessToken()->delete();
-        return response()->json([
-            'message' => "Logout success",
-            'data' => [],
-        ]);
+        return $this->response()->success([], 'Logout success');
     }
 }
