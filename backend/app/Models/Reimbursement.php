@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\ReimbursementStatusEnum;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Storage;
 
 class Reimbursement extends Model
 {
@@ -25,6 +26,23 @@ class Reimbursement extends Model
     protected $casts = [
         'status' => ReimbursementStatusEnum::class,
     ];
+
+    protected $appends = [
+        'attachment_url',
+    ];
+
+    public function getAttachmentUrlAttribute()
+    {
+        if (!$this->attachment_path) {
+            return null;
+        }
+
+        if (str_starts_with($this->attachment_path, 'http://') || str_starts_with($this->attachment_path, 'https://')) {
+            return $this->attachment_path;
+        }
+
+        return Storage::url($this->attachment_path);
+    }
 
     public function user()
     {
