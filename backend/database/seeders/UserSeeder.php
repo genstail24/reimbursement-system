@@ -12,20 +12,38 @@ class UserSeeder extends Seeder
     {
         $users = [
             [
-                'name' => 'Admin User',
+                'name' => 'Admin',
                 'email' => 'admin@example.com',
                 'password' => Hash::make('password'),
                 'role' => 'admin',
             ],
             [
-                'name' => 'Manager User',
+                'name' => 'Manager One',
                 'email' => 'manager@example.com',
                 'password' => Hash::make('password'),
                 'role' => 'manager',
             ],
             [
-                'name' => 'Employee User',
-                'email' => 'employee@example.com',
+                'name' => 'Manager Two',
+                'email' => 'managerTwo@example.com',
+                'password' => Hash::make('password'),
+                'role' => 'manager',
+            ],
+            [
+                'name' => 'Employee One',
+                'email' => 'employee1@example.com',
+                'password' => Hash::make('password'),
+                'role' => 'employee',
+            ],
+            [
+                'name' => 'Employee Two',
+                'email' => 'employee2@example.com',
+                'password' => Hash::make('password'),
+                'role' => 'employee',
+            ],
+            [
+                'name' => 'Employee Three',
+                'email' => 'employee3@example.com',
                 'password' => Hash::make('password'),
                 'role' => 'employee',
             ],
@@ -35,12 +53,12 @@ class UserSeeder extends Seeder
             $user = User::updateOrCreate(
                 ['email' => $data['email']],
                 [
-                    'name' => $data['name'],
+                    'name'     => $data['name'],
                     'password' => $data['password'],
                 ]
             );
 
-            // $user->assignRole($data['role']);
+            $user->assignRole($data['role']);
         }
     }
 }

@@ -9,11 +9,12 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
 use Laravel\Sanctum\HasApiTokens as SanctumHasApiTokens;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable, SanctumHasApiTokens, SoftDeletes;
+    use HasFactory, Notifiable, SanctumHasApiTokens, SoftDeletes, HasRoles;
 
     /**
      * The attributes that are mass assignable.

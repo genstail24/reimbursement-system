@@ -23,20 +23,32 @@ class AuthController extends Controller
         $user  = Auth::user();
         $token = $user->createToken('api-token')->plainTextToken;
 
+        $userData = $user->toArray();
+        $userData['roles']       = $user->getRoleNames();
+        $userData['permissions'] = $user->getAllPermissions()->pluck('name'); 
+
         return $this->response()->success([
             'token' => $token,
-            'user'  => $user,
-        ], 'Login Success');
+            'user'  => $userData,
+        ], 'Login successful');
     }
 
     public function user(Request $request)
     {
-        return $this->response()->success($request->user(), 'Get logged in user');
+        $user = $request->user();
+
+        $userData = $user->toArray();
+        $userData['roles']       = $user->getRoleNames();
+        $userData['permissions'] = $user->getAllPermissions()->pluck('name');
+
+        return $this->response()->success([
+            'user' => $userData,
+        ], 'Get logged in user');
     }
 
     public function logout(Request $request)
     {
         $request->user()->currentAccessToken()->delete();
-        return $this->response()->success([], 'Logout success');
+        return $this->response()->success([], 'Logout successful');
     }
 }

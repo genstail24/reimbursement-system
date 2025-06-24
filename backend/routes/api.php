@@ -2,8 +2,12 @@
 
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\CategoryController;
+use App\Http\Controllers\API\PermissionController;
 use App\Http\Controllers\API\ReimbursementController;
+use App\Http\Controllers\API\RoleController;
+use App\Http\Controllers\API\RolePermissionController;
 use App\Http\Controllers\API\UserController;
+use App\Http\Controllers\API\UserRoleController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -29,6 +33,8 @@ Route::prefix('auth')->group(function () {
 Route::middleware('auth:sanctum')->group(function () {
     // /users
     Route::apiResource('users', UserController::class);
+    Route::get('users/{user}/roles', [UserRoleController::class, 'index']);
+    Route::put('users/{user}/roles', [UserRoleController::class, 'sync']);
 
     // /categories
     Route::apiResource('categories', CategoryController::class);
@@ -43,4 +49,12 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put('{reimbursement}/approval', [ReimbursementController::class, 'approval'])
             ->name('reimbursements.approval');
     });
+
+    // /roles
+    Route::apiResource('roles', RoleController::class);
+    Route::get('roles/{role}/permissions', [RolePermissionController::class, 'index']);
+    Route::put('roles/{role}/permissions', [RolePermissionController::class, 'sync']);
+
+    // /permissions
+    Route::apiResource('permissions', PermissionController::class);
 });
