@@ -11,6 +11,8 @@ use App\Helpers\HTTPResponse;
 use App\Mail\NewReimbursementSubmission;
 use App\Models\Category;
 use App\Models\User;
+use App\Notifications\NewReimbursementSubmission as NotificationsNewReimbursementSubmission;
+use App\Notifications\NewReimbursementSubmissionNotification;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
 
@@ -71,6 +73,11 @@ class ReimbursementController extends Controller
                 ->causedBy(Auth::user())
                 ->withProperties(['action' => 'submitted'])
                 ->log('Reimbursement submission');
+
+            $managers = User::role('manager')->get();
+            foreach ($managers as $manager) {
+                $manager->notify(new NewReimbursementSubmissionNotification($reimbursement));
+            }
 
             return $this->response()->created($reimbursement, 'Reimbursement submitted successfully.');
         } catch (\Throwable $e) {
