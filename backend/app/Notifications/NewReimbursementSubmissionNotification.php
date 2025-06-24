@@ -37,7 +37,7 @@ class NewReimbursementSubmissionNotification extends Notification implements Sho
             ->line('Title: ' . $this->reimbursement->title)
             ->line('Amount: Rp ' . number_format((int) $this->reimbursement->amount, 0, ',', '.'))
             ->line('Category: ' . $this->reimbursement->category->name)
-            ->action('View Details', url('/manager/reimbursements')) // update if frontend route exists
+            ->action('View Details', config('app.frontend_url') . "/reimbursements/" . $this->reimbursement->id)
             ->line('Please review it as soon as possible.');
     }
 
