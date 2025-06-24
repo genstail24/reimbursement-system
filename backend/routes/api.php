@@ -1,18 +1,22 @@
 <?php
 
 use App\Http\Controllers\API\AuthController;
-use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\API\CategoryController;
+use App\Http\Controllers\API\ReimbursementController;
+use App\Http\Controllers\API\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/hello-world', function(Request $request) {
-    return "Hello World";
-});
+/*
+|--------------------------------------------------------------------------
+| API Routes
+|--------------------------------------------------------------------------
+| Here is where you can register API routes for your application.
+| These routes are loaded by the RouteServiceProvider within a group
+| which is assigned the "api" middleware group.
+*/
 
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
+Route::get('/hello-world', fn(Request $request) => 'Hello World');
 
 Route::prefix('auth')->group(function () {
     Route::post('login', [AuthController::class, 'login'])->name('auth.login');
@@ -22,5 +26,21 @@ Route::prefix('auth')->group(function () {
     });
 });
 
-Route::resource('users', UserController::class);
-Route::resource('categories', CategoryController::class);
+Route::middleware('auth:sanctum')->group(function () {
+    // /users
+    Route::apiResource('users', UserController::class);
+
+    // /categories
+    Route::apiResource('categories', CategoryController::class);
+
+    // /reimbursements
+    Route::prefix('reimbursements')->group(function () {
+        Route::apiResource('/', ReimbursementController::class)
+            ->parameters(['' => 'reimbursement'])
+            ->only(['index', 'show', 'destroy']);
+        Route::post('submission', [ReimbursementController::class, 'submission'])
+            ->name('reimbursements.submission');
+        Route::put('{reimbursement}/approval', [ReimbursementController::class, 'approval'])
+            ->name('reimbursements.approval');
+    });
+});
