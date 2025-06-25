@@ -24,7 +24,14 @@ class ReimbursementController extends Controller
      */
     public function index()
     {
-        $reimbursements = Reimbursement::with(['category', 'user'])->latest()->get();
+        $query = Reimbursement::with(['category', 'user', 'reviewedBy'])->latest();
+
+        if (Auth::user()->hasRole('employee')) {
+            $query->where('user_id', Auth::id());
+        }
+
+        $reimbursements = $query->get();
+
         return $this->response()->success($reimbursements, 'Reimbursements retrieved successfully.');
     }
 
@@ -115,6 +122,7 @@ class ReimbursementController extends Controller
             }
 
             $reimbursement->approval_reason = $validated['approval_reason'] ?? '';
+            $reimbursement->reviewed_by = auth()->user()->id;
             $reimbursement->status = $validated['status'];
             $reimbursement->save();
 
@@ -136,7 +144,7 @@ class ReimbursementController extends Controller
      */
     public function show(Reimbursement $reimbursement)
     {
-        $reimbursement->load(['category', 'user']);
+        $reimbursement->load(['category', 'user', 'reviewedBy']);
         return $this->response()->success($reimbursement, 'Reimbursement details retrieved successfully.');
     }
 
