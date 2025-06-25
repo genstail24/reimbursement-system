@@ -101,11 +101,8 @@ class ReimbursementController extends Controller
     {
         try {
             $validated = $request->validate([
-                'title'       => 'sometimes|string|max:255',
-                'description' => 'nullable|string',
-                'amount'      => 'sometimes|numeric|min:0',
-                'category_id' => 'sometimes|exists:categories,id',
-                'status'      => ['required', Rule::in([
+                'approval_reason' => 'nullable',
+                'status' => ['required', Rule::in([
                     ReimbursementStatusEnum::APPROVED->value,
                     ReimbursementStatusEnum::REJECTED->value,
                 ])],
@@ -117,6 +114,7 @@ class ReimbursementController extends Controller
                 $reimbursement->approved_at = now();
             }
 
+            $reimbursement->approval_reason = $validated['approval_reason'] ?? '';
             $reimbursement->status = $validated['status'];
             $reimbursement->save();
 
