@@ -186,12 +186,12 @@ function getStatusSeverity(status: string) {
         </Column>
         <Column field="reviewed_by.name" header="Reviewed By" />
         <Column field="created_at" header="Submitted At" />
-        <Column field="deleted_at" header="Deleted At" :hidden="isAdmin"/>
+        <Column field="deleted_at" header="Deleted At" :hidden="isAdmin" />
         <Column header="Action">
           <template #body="{ data }">
             <div class="w-full">
               <div v-if="data.deleted_at" class="flex justify-between">
-                <Tag severity="danger" value="This item has been deleted"/>
+                <Tag severity="danger" value="This item has been deleted" />
               </div>
               <div v-else>
                 <Button v-has-ability-to="'reimbursement.view'" icon="pi pi-eye" class="p-button-text p-button-sm" @click="openDetailDialog(data.id)" />
