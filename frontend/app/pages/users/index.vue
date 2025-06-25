@@ -11,6 +11,10 @@ import { onMounted, reactive, ref, watch } from 'vue'
 import { useMessages } from '~/composables/messages'
 import { useUserStore } from '~/stores/user'
 
+definePageMeta({
+  auth: true,
+})
+
 const store = useUserStore()
 const { showErrorMessage, showSuccessMessage } = useMessages()
 const { confirmDelete } = useConfirmation()
@@ -43,14 +47,14 @@ watch(
   () => store.isFailed,
   (failed) => {
     if (failed)
-      showErrorMessage(store.getMessage ?? 'Operation failed')
+      showErrorMessage('Failed', store.getMessage ?? 'Operation failed')
   },
 )
 watch(
   () => store.isSuccess,
   (ok) => {
     if (ok)
-      showSuccessMessage(store.getMessage ?? 'Success')
+      store.getMessage && showSuccessMessage('Success', store.getMessage ?? 'Success')
   },
 )
 

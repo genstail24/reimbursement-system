@@ -11,6 +11,10 @@ import { onMounted, reactive, ref, watch } from 'vue'
 import { useMessages } from '~/composables/messages'
 import { useRoleStore } from '~/stores/role'
 
+definePageMeta({
+  auth: true,
+})
+
 const store = useRoleStore()
 const { showErrorMessage, showSuccessMessage } = useMessages()
 const { confirmDelete } = useConfirmation()
@@ -43,11 +47,11 @@ onMounted(async () => {
 
 watch(
   () => store.isFailed,
-  f => f && showErrorMessage(store.getMessage ?? 'Error'),
+  f => f && showErrorMessage('Failed', store.getMessage ?? 'Error'),
 )
 watch(
   () => store.isSuccess,
-  s => s && showSuccessMessage(store.getMessage ?? 'Success'),
+  s => s && store.getMessage && showSuccessMessage('Success', store.getMessage ?? 'Success'),
 )
 
 function openDialog(r?: Role) {
@@ -97,9 +101,9 @@ async function submitRole() {
     } as UpdateRolePayload)
   }
   else {
-    await store.create({
+    await store.store({
       name: form.name!,
-      guard_name: form.guard_name!,
+      guard_name: 'web',
     } as CreateRolePayload)
   }
   if (!store.isFailed) {
@@ -187,10 +191,6 @@ async function submitPerms() {
         <div class="col-12 field">
           <label for="name">Name</label>
           <InputText id="name" v-model="form.name" />
-        </div>
-        <div class="field col-12">
-          <label for="guard">Guard Name</label>
-          <InputText id="guard" v-model="form.guard_name" />
         </div>
         <div class="col-12 mt-4 flex gap-2 justify-end">
           <Button

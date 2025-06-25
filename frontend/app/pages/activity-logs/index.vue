@@ -9,6 +9,10 @@ import { onMounted, ref, watch } from 'vue'
 import { useMessages } from '~/composables/messages'
 import { useActivityLogStore } from '~/stores/activity-log'
 
+definePageMeta({
+  auth: true,
+})
+
 const store = useActivityLogStore()
 const { showErrorMessage } = useMessages()
 

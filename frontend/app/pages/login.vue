@@ -42,7 +42,7 @@ async function submitHandler() {
   try {
     await login()
     if (!errorMsg.value) {
-      showSuccessMessage(t('login_success'), '')
+      showSuccessMessage(t('welcome', 'Welcome'), t('login_success', 'Successfuly login'))
       router.push('/')
     }
     else {

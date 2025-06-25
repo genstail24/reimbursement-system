@@ -29,7 +29,7 @@ export const useCategoryStore = defineStore('category', {
       this.validationMessages = {}
     },
 
-    async fetch() {
+    async fetchAll() {
       this.resetStatus()
       this.loading = true
       try {
@@ -40,6 +40,25 @@ export const useCategoryStore = defineStore('category', {
       }
       catch (e: unknown) {
         const err = e as FetchError
+        this.error = true
+        this.message = err.data?.message ?? err.message
+      }
+      finally {
+        this.loading = false
+      }
+    },
+
+    async fetchById(id: number) {
+      this.resetStatus()
+      this.loading = true
+      try {
+        const { data } = await useNuxtApp().$auth.$fetch<{ data: Category [] }>(`/categories/${id}`)
+        this.categories = data || []
+        this.success = true
+        this.message = ''
+      }
+      catch (e: unknown) {
+        const err = e as FetchError<{ message?: string }>
         this.error = true
         this.message = err.data?.message ?? err.message
       }

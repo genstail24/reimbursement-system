@@ -46,7 +46,7 @@ export const useUserStore = defineStore('user', {
           roles: item.roles.map(role => role?.name || ''),
         }))
         this.success = true
-        this.message = res.message
+        this.message = ''
       }
       catch (e: unknown) {
         const err = e as FetchError<{ message?: string }>
@@ -69,7 +69,7 @@ export const useUserStore = defineStore('user', {
         }>(`/users/${id}`)
         this.user = res.data
         this.success = true
-        this.message = res.message
+        this.message = ''
       }
       catch (e: unknown) {
         const err = e as FetchError<{ message?: string }>

@@ -47,7 +47,7 @@ export const useRoleStore = defineStore('role', {
         }>('/roles')
         this.items = res.data || []
         this.success = true
-        this.message = res.message
+        this.message = ''
       }
       catch (e: unknown) {
         const err = e as FetchError<{ message?: string }>
@@ -69,7 +69,7 @@ export const useRoleStore = defineStore('role', {
         }>(`/roles/${id}`)
         this.item = res.data
         this.success = true
-        this.message = res.message
+        this.message = ''
       }
       catch (e: unknown) {
         const err = e as FetchError<{ message?: string }>
