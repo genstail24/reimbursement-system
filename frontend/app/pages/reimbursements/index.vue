@@ -7,6 +7,12 @@ import { useReimbursementStore } from '~/stores/reimbursement'
 
 definePageMeta({
   auth: true,
+  middleware: [
+    'permission',
+  ],
+  permission: [
+    'reimbursement.view',
+  ],
 })
 
 const reimbursementStore = useReimbursementStore()
@@ -134,6 +140,13 @@ async function deleteItem(id: number) {
       await reimbursementStore.fetchAll()
   })
 }
+function getStatusSeverity(status: string) {
+  if (status === 'approved')
+    return 'success'
+  else if (status === 'rejected')
+    return 'danger'
+  return 'info'
+}
 </script>
 
 <template>
@@ -144,7 +157,7 @@ async function deleteItem(id: number) {
           Reimbursements
         </h2>
         <div>
-          <Button label="Submit Reimbursement" icon="pi pi-plus" @click="openSubmissionDialog" />
+          <Button v-has-ability-to="'reimbursement.create'" label="Submit Reimbursement" icon="pi pi-plus" @click="openSubmissionDialog" />
         </div>
       </div>
 
@@ -160,14 +173,23 @@ async function deleteItem(id: number) {
         </Column>
         <Column field="title" header="Title" />
         <Column field="amount" header="Amount" />
-        <Column field="status" header="Status" />
+        <Column header="Status">
+          <template #body="{ data }">
+            <Tag
+              :value="data.status"
+              :severity="getStatusSeverity(data.status)"
+              rounded
+            />
+          </template>
+        </Column>
+        <Column field="reviewed_by.name" header="Reviewed By" />
         <Column field="created_at" header="Submitted At" />
         <Column header="Action">
           <template #body="{ data }">
             <div class="flex justify-between">
-              <Button icon="pi pi-eye" class="p-button-text p-button-sm" @click="openDetailDialog(data.id)" />
+              <Button v-has-ability-to="'reimbursement.view'" icon="pi pi-eye" class="p-button-text p-button-sm" @click="openDetailDialog(data.id)" />
               <Button
-                v-if="authStore" icon="pi pi-trash" class="p-button-text p-button-sm p-button-danger"
+                v-has-ability-to="'reimbursement.delete'" icon="pi pi-trash" class="p-button-text p-button-sm p-button-danger"
                 @click="deleteItem(data.id)"
               />
             </div>
@@ -219,6 +241,7 @@ async function deleteItem(id: number) {
         <p><strong>Category ID:</strong> {{ reimbursementStore.item.category_id }}</p>
         <p><strong>Status:</strong> {{ reimbursementStore.item.status }}</p>
         <p><strong>Approval Reason:</strong> {{ reimbursementStore.item.approval_reason ?? '-' }}</p>
+        <p><strong>Reviewed By:</strong> {{ reimbursementStore.item.reviewed_by?.name ?? '-' }}</p>
         <p>
           <strong>Attachment:</strong>
           <Button

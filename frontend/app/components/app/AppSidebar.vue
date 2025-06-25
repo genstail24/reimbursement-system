@@ -1,6 +1,7 @@
 <script setup lang='ts'>
-const config = useRuntimeConfig()
+// const config = useRuntimeConfig()
 const { menu } = useNavigationMenu()
+const { user } = useAuth()
 
 const collapsed = useState<boolean>('collapsed')
 const isOnMobile = useState<boolean>('isOnMobile')
@@ -52,8 +53,12 @@ onMounted(() => {
       </template>
       <template #footer>
         <div class="text-xs text-color-primary m-2 text-center">
-          <span v-if="!collapsed">PrimeVue-Nuxt Starter {{ config.public.APP_VERSION }}</span>
-          <span v-if="collapsed">{{ config.public.APP_VERSION }}</span>
+          <div v-if="!collapsed">
+            <div>{{ user?.name }}</div>
+            <div class="text-xs text-gray-400 italic">
+              {{ user?.roles?.join(', ') }}
+            </div>
+          </div>
         </div>
       </template>
     </sidebar-menu>
