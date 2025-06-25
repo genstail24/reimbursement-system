@@ -13,6 +13,12 @@ import { useRoleStore } from '~/stores/role'
 
 definePageMeta({
   auth: true,
+  middleware: [
+    'permission',
+  ],
+  permission: [
+    'activity-log.view',
+  ],
 })
 
 const store = useRoleStore()
@@ -131,7 +137,9 @@ async function submitPerms() {
       <h2 class="text-xl">
         Roles Management
       </h2>
-      <Button label="New Role" icon="pi pi-plus" @click="openDialog()" />
+      <Button
+        v-has-ability-to="'role.create'" label="New Role" icon="pi pi-plus" @click="openDialog()"
+      />
     </div>
 
     <DataTable
@@ -162,16 +170,19 @@ async function submitPerms() {
       <Column header="Action" style="width: 15%">
         <template #body="{ data }">
           <Button
+            v-has-ability-to="'role.update'"
             icon="pi pi-pencil"
             class="p-button-text p-button-sm"
             @click="openDialog(data)"
           />
           <Button
+            v-has-ability-to="'role.sync_permissions'"
             icon="pi pi-key"
             class="p-button-text p-button-sm"
             @click="openPermsDialog(data)"
           />
           <Button
+            v-has-ability-to="'role.delete'"
             icon="pi pi-trash"
             class="p-button-text p-button-sm p-button-danger"
             @click="removeRole(data.id)"

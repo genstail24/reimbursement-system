@@ -11,6 +11,12 @@ import { useActivityLogStore } from '~/stores/activity-log'
 
 definePageMeta({
   auth: true,
+  middleware: [
+    'permission',
+  ],
+  permission: [
+    'activity-log.view',
+  ],
 })
 
 const store = useActivityLogStore()

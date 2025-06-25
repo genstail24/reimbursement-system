@@ -39,7 +39,7 @@ export function useNavigationMenu() {
         title: 'User',
         icon: 'pi pi-user',
         href: '/users',
-        permission: ['user.view'],
+        permission: ['user.create'],
       },
       {
         title: 'Role',

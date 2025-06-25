@@ -13,6 +13,12 @@ import { useUserStore } from '~/stores/user'
 
 definePageMeta({
   auth: true,
+  middleware: [
+    'permission',
+  ],
+  permission: [
+    'user.view',
+  ],
 })
 
 const store = useUserStore()
@@ -124,7 +130,7 @@ async function submitForm() {
         <h2 class="text-xl">
           Users
         </h2>
-        <Button label="New User" icon="pi pi-plus" @click="openDialog()" />
+        <Button v-has-ability-to="'user.create'" label="New User" icon="pi pi-plus" @click="openDialog()" />
       </div>
 
       <DataTable
@@ -156,11 +162,13 @@ async function submitForm() {
         <Column header="Action" style="width: 12%">
           <template #body="{ data }">
             <Button
+              v-has-ability-to="'user.update'"
               icon="pi pi-pencil"
               class="p-button-text p-button-sm"
               @click="openDialog(data)"
             />
             <Button
+              v-has-ability-to="'user.delete'"
               icon="pi pi-trash"
               class="p-button-text p-button-sm p-button-danger"
               @click="removeUser(data.id)"

@@ -4,6 +4,12 @@ import { FilterMatchMode } from '@primevue/core/api'
 
 definePageMeta({
   auth: true,
+  middleware: [
+    'permission',
+  ],
+  permission: [
+    'category.view',
+  ],
 })
 
 const store = useCategoryStore()
@@ -61,7 +67,7 @@ function removeCategory(id: number) {
   <div class="card">
     <div class="mb-4 flex justify-between">
       <span class="text-xl" v-text="$t('category', 'Category')" />
-      <Button :label="$t('add', 'Add')" icon="pi pi-plus" @click="openDialog()" />
+      <Button v-has-ability-to="'category.create'" :label="$t('add', 'Add')" icon="pi pi-plus" @click="openDialog()" />
     </div>
 
     <DataTable
@@ -89,11 +95,13 @@ function removeCategory(id: number) {
         <template #body="{ data }">
           <div class="flex gap-2 items-center">
             <Button
+              v-has-ability-to="'category.update'"
               icon="pi pi-pencil"
               class="p-button-text p-button-sm"
               @click="openDialog(data)"
             />
             <Button
+              v-has-ability-to="'category.delete'"
               icon="pi pi-trash"
               class="p-button-text p-button-sm p-button-danger"
               @click="removeCategory(data.id)"
