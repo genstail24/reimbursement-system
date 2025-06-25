@@ -30,6 +30,10 @@ class ReimbursementController extends Controller
             $query->where('user_id', Auth::id());
         }
 
+        if (Auth::user()->hasRole('admin')) {
+            $query->withTrashed();
+        }
+
         $reimbursements = $query->get();
 
         return $this->response()->success($reimbursements, 'Reimbursements retrieved successfully.');
