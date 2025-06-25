@@ -7,6 +7,7 @@ export interface Reimbursement {
   attachment: string | null
   attachment_url: string | null
   approval_reason: string | null
+  reviewed_by: any | null
   status: 'pending' | 'approved' | 'rejected'
   created_at: string
   updated_at: string
