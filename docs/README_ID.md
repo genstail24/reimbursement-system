@@ -26,15 +26,15 @@ Sebelumnya, pastikan sistem Anda telah memenuhi requirement berikut:
 
 ### Use Case Diagram
 
-![Use Case Diagram](docs/images/use-case-diagram.png)
+![Use Case Diagram](docs/images/use-case-diagram.jpg)
 
 ### Entity Relationship Diagram
 
-![Entity Relationship Diagram](docs/images/entity-relationship-diagram.png)
+![Entity Relationship Diagram](docs/images/erd.jpg)
 
 ### Diagram arsitektur
 
-![Diagram Arsitektur](docs/images/architecture-diagram.png)
+![Diagram Arsitektur](docs/images/architecture-diagram.jpg)
 
 * **Frontend**: Nuxt.js berperan sebagai Interface langsung dengan user dan mengonsumsi API backend.
 * **Backend**: Laravel menyediakan RESTful API, menangani business process, komunikasi dengan database, atau komunikasi dengan pihak ketiga (notifikasi email).

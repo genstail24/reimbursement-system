@@ -27,15 +27,15 @@ Before starting, ensure your system meets the following requirements:
 
 ### Use Case Diagram
 
-![Use Case Diagram](docs/images/use-case-diagram.png)
+![Use Case Diagram](docs/images/use-case-diagram.jpg)
 
 ### Entity Relationship Diagram
 
-![Entity Relationship Diagram](docs/images/entity-relationship-diagram.png)
+![Entity Relationship Diagram](docs/images/erd.jpg)
 
 ### Architecture Diagram
 
-![Architecture Diagram](docs/images/architecture-diagram.png)
+![Architecture Diagram](docs/images/architecture-diagram.jpg)
 
 * **Frontend**: Nuxt.js serves as the user interface and consumes backend APIs.
 * **Backend**: Laravel provides RESTful APIs, handles business processes, communicates with the database, and integrates with third-party services (e.g., email notifications).
