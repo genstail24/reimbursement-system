@@ -74,7 +74,7 @@ class ReimbursementController extends Controller
                 'category_id'         => $validated['category_id'],
                 'submitted_at'        => now(),
                 'status'              => ReimbursementStatusEnum::PENDING,
-                'attachment_path'=> $filePath,
+                'attachment_path' => $filePath,
             ]);
 
             activity()
@@ -153,5 +153,43 @@ class ReimbursementController extends Controller
         } catch (\Throwable $e) {
             return $this->response()->error(request(), $e);
         }
+    }
+
+    /**
+     * Return dashboard metrics.
+     */
+    public function metrics()
+    {
+        $user     = Auth::user();
+        $isAdmin  = $user->hasRole(['admin', 'manager']); // gunakan Spatie roles
+
+        $baseQuery = Reimbursement::query();
+        if (! $isAdmin) {
+            $baseQuery->where('user_id', $user->id);
+        }
+
+        $totalRequests = (clone $baseQuery)->count();
+
+        $pending  = (clone $baseQuery)
+            ->where('status', ReimbursementStatusEnum::PENDING->value)
+            ->count();
+        $approved = (clone $baseQuery)
+            ->where('status', ReimbursementStatusEnum::APPROVED->value)
+            ->count();
+        $rejected = (clone $baseQuery)
+            ->where('status', ReimbursementStatusEnum::REJECTED->value)
+            ->count();
+
+        $totalAmount = (clone $baseQuery)
+            ->where('status', ReimbursementStatusEnum::APPROVED->value)
+            ->sum('amount');
+
+        return $this->response()->success([
+            'totalRequests' => $totalRequests,
+            'pending'       => $pending,
+            'approved'      => $approved,
+            'rejected'      => $rejected,
+            'totalAmount'   => $totalAmount,
+        ], 'Metrics retrieved successfully.');
     }
 }
