@@ -30,7 +30,7 @@ Sebelumnya, pastikan sistem Anda telah memenuhi requirement berikut:
 
 ### Entity Relationship Diagram
 
-![Entity Relationship Diagram](docs/images/erd.jpg)
+![Entity Relationship Diagram](docs/images/entity-relationship-diagram.jpg)
 
 ### Diagram arsitektur
 

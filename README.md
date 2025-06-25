@@ -1,3 +1,5 @@
+For Indonesian documentation, see [docs/README_IDN.md](docs/README_ID.md) 
+
 # Employee Reimbursement Management System
 
 A reimbursement management application for employees built using Laravel 12 (backend) and Nuxt.js 3 (frontend).
@@ -31,7 +33,7 @@ Before starting, ensure your system meets the following requirements:
 
 ### Entity Relationship Diagram
 
-![Entity Relationship Diagram](docs/images/erd.jpg)
+![Entity Relationship Diagram](docs/images/entity-relationship-diagram.jpg)
 
 ### Architecture Diagram
 
