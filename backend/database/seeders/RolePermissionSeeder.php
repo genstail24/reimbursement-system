@@ -12,10 +12,8 @@ class RolePermissionSeeder extends Seeder
     {
         $permissions = [
             // Reimbursements
+            'reimbursement.view',
             'reimbursement.create',
-            'reimbursement.view_all',
-            'reimbursement.view_own',
-            'reimbursement.view_single',
             'reimbursement.delete',
             'reimbursement.approve',
 
@@ -58,8 +56,7 @@ class RolePermissionSeeder extends Seeder
 
         $admin->syncPermissions($permissions);
         $manager->syncPermissions([
-            'reimbursement.view_all',
-            'reimbursement.view_single',
+            'reimbursement.view',
             'reimbursement.approve',
 
             'user.view',
@@ -70,9 +67,9 @@ class RolePermissionSeeder extends Seeder
         ]);
         $employee->syncPermissions([
             'reimbursement.create',
-            'reimbursement.view_own',
-            'reimbursement.view_single',
+            'reimbursement.view',
             'reimbursement.delete',
+            'category.view',
         ]);
     }
 }
