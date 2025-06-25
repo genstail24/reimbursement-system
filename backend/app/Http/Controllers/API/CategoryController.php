@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\CategoryResource;
 use App\Models\Category;
 use Illuminate\Http\Request;
 
@@ -14,7 +15,7 @@ class CategoryController extends Controller
     public function index()
     {
         $categories = Category::latest()->get();
-        return $this->response()->success($categories, 'Category list retrieved successfully.');
+        return $this->response()->success(CategoryResource::collection($categories), 'Category list retrieved successfully.');
     }
 
     /**
@@ -30,7 +31,7 @@ class CategoryController extends Controller
 
             $category = Category::create($validated);
 
-            return $this->response()->created($category, 'Category created successfully.');
+            return $this->response()->created(new CategoryResource($category), 'Category created successfully.');
         } catch (\Throwable $e) {
             return $this->response()->error($request, $e);
         }
@@ -41,7 +42,7 @@ class CategoryController extends Controller
      */
     public function show(Category $category)
     {
-        return $this->response()->success($category, 'Category retrieved successfully.');
+        return $this->response()->success(new CategoryResource($category), 'Category retrieved successfully.');
     }
 
     /**
@@ -57,7 +58,7 @@ class CategoryController extends Controller
 
             $category->update($validated);
 
-            return $this->response()->success($category, 'Category updated successfully.');
+            return $this->response()->success(new CategoryResource($category), 'Category updated successfully.');
         } catch (\Throwable $e) {
             return $this->response()->error($request, $e);
         }
@@ -70,7 +71,7 @@ class CategoryController extends Controller
     {
         try {
             $category->delete();
-            return $this->response()->success([], 'Category deleted successfully.');
+            return $this->response()->success(new CategoryResource($category), 'Category deleted successfully.');
         } catch (\Throwable $e) {
             return $this->response()->error(request(), $e);
         }
