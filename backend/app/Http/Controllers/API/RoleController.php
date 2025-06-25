@@ -51,7 +51,7 @@ class RoleController extends Controller
     {
         $role->delete();
         return $this->response()
-            ->success([], 'Role deleted successfully.');
+            ->success(new RoleResource($role), 'Role deleted successfully.');
     }
 
     public function syncPermissions(Request $request, Role $role)

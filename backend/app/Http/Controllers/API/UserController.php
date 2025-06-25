@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 use App\Helpers\HTTPResponse;
+use App\Http\Resources\UserResource;
 
 class UserController extends Controller
 {
@@ -17,7 +18,7 @@ class UserController extends Controller
     public function index()
     {
         $users = User::with('roles')->get();
-        return $this->response()->success($users, 'List user berhasil diambil');
+        return $this->response()->success(UserResource::collection($users), 'List user berhasil diambil');
     }
 
     /**
@@ -40,7 +41,7 @@ class UserController extends Controller
 
             // $user->assignRole('role'); // kalau nanti pakai Spatie role
 
-            return $this->response()->created($user, 'User berhasil dibuat');
+            return $this->response()->created(new UserResource($user), 'User berhasil dibuat');
         } catch (\Throwable $e) {
             return $this->response()->error($request, $e);
         }
@@ -53,7 +54,7 @@ class UserController extends Controller
     {   
         $user->load('roles');
 
-        return $this->response()->success($user, 'Detail user');
+        return $this->response()->success(new UserResource($user), 'Detail user');
     }
 
     /**
@@ -82,7 +83,7 @@ class UserController extends Controller
 
             $user->save();
 
-            return $this->response()->success($user, 'User berhasil diperbarui');
+            return $this->response()->success(new UserResource($user), 'User berhasil diperbarui');
         } catch (\Throwable $e) {
             return $this->response()->error($request, $e);
         }
@@ -94,8 +95,8 @@ class UserController extends Controller
     public function destroy(User $user)
     {
         try {
-            $user->delete(); // Soft delete jika model pakai SoftDeletes
-            return $this->response()->success([], 'User berhasil dihapus');
+            $user->delete();
+            return $this->response()->success(new UserResource($user), 'User berhasil dihapus');
         } catch (\Throwable $e) {
             return $this->response()->error(request(), $e);
         }

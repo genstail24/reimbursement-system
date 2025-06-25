@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\UserResource;
 
 class AuthController extends Controller
 {
@@ -23,25 +24,19 @@ class AuthController extends Controller
         $user  = Auth::user();
         $token = $user->createToken('api-token')->plainTextToken;
 
-        $userData = $user->toArray();
-        $userData['roles']       = $user->getRoleNames();
-        $userData['permissions'] = $user->getAllPermissions()->pluck('name'); 
-
         return $this->response()->success([
             'token' => $token,
-            'user'  => $userData,
+            'user'  => new UserResource(
+                $user->load('roles')
+            ),
         ], 'Login successful');
     }
 
     public function user(Request $request)
     {
-        $user = $request->user();
-
-        $userData = $user->toArray();
-        $userData['roles']       = $user->getRoleNames();
-        $userData['permissions'] = $user->getAllPermissions()->pluck('name');
-
-        return $this->response()->success($userData, 'Get logged in user');
+        return $this->response()->success(new UserResource(
+             $request->user()->load('roles')
+        ), 'Get logged in user');
     }
 
     public function logout(Request $request)

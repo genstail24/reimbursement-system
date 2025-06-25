@@ -317,6 +317,7 @@ function getStatusSeverity(status: string) {
           <Textarea
             v-if="reimbursementStore.item.status === 'pending'"
             v-model="approvalReason"
+            v-has-ability-to="'reimbursement.approve'"
             placeholder="Type any reason (optional)"
             class="w-full"
             auto-resize
@@ -326,6 +327,7 @@ function getStatusSeverity(status: string) {
             <template v-if="reimbursementStore.item.status === 'pending'">
               <Button
                 v-if="authStore"
+                v-has-ability-to="'reimbursement.approve'"
                 label="Approve"
                 icon="pi pi-check-circle"
                 severity="success"
@@ -333,6 +335,7 @@ function getStatusSeverity(status: string) {
               />
               <Button
                 v-if="authStore"
+                v-has-ability-to="'reimbursement.approve'"
                 label="Reject"
                 icon="pi pi-times-circle"
                 severity="danger"

@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 use App\Helpers\HTTPResponse;
+use App\Http\Resources\ReimbursementResource;
 use App\Mail\NewReimbursementSubmission;
 use App\Models\Category;
 use App\Models\User;
@@ -36,7 +37,7 @@ class ReimbursementController extends Controller
 
         $reimbursements = $query->get();
 
-        return $this->response()->success($reimbursements, 'Reimbursements retrieved successfully.');
+        return $this->response()->success(ReimbursementResource::collection($reimbursements), 'Reimbursements retrieved successfully.');
     }
 
     /**
@@ -99,7 +100,7 @@ class ReimbursementController extends Controller
                 $manager->notify(new NewReimbursementSubmissionNotification($reimbursement));
             }
 
-            return $this->response()->created($reimbursement, 'Reimbursement submitted successfully.');
+            return $this->response()->created(new ReimbursementResource($reimbursement), 'Reimbursement submitted successfully.');
         } catch (\Throwable $e) {
             return $this->response()->error($request, $e);
         }
@@ -137,7 +138,7 @@ class ReimbursementController extends Controller
                 ->log("Reimbursement {$validated['status']}");
 
             $action = $validated['status'] === 'approved' ? 'approved' : 'rejected';
-            return $this->response()->success($reimbursement, "Reimbursement {$action} successfully.");
+            return $this->response()->success(new ReimbursementResource($reimbursement), "Reimbursement {$action} successfully.");
         } catch (\Throwable $e) {
             return $this->response()->error($request, $e);
         }
@@ -159,7 +160,7 @@ class ReimbursementController extends Controller
     {
         try {
             $reimbursement->delete();
-            return $this->response()->success([], 'Reimbursement deleted successfully.');
+            return $this->response()->success(new ReimbursementResource($reimbursement), 'Reimbursement deleted successfully.');
         } catch (\Throwable $e) {
             return $this->response()->error(request(), $e);
         }
