@@ -6,6 +6,7 @@ export interface ActivityLog {
   subject_type: string
   event: string | null
   subject_id: number | null
+  subject: any | null
   causer_type: string | null
   causer_id: number | null
   properties: Record<string, any>
