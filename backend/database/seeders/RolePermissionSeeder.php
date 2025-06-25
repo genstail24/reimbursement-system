@@ -68,7 +68,7 @@ class RolePermissionSeeder extends Seeder
         $employee->syncPermissions([
             'reimbursement.create',
             'reimbursement.view',
-            'reimbursement.delete',
+            // 'reimbursement.delete',
             'category.view',
         ]);
     }
