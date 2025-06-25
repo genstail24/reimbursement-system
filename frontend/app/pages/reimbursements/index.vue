@@ -199,88 +199,156 @@ function getStatusSeverity(status: string) {
     </div>
 
     <!-- Submission Dialog -->
-    <Dialog v-model:visible="isDialogVisible" header="Submit Reimbursement" modal class="w-1/3">
-      <div class="p-fluid">
-        <div class="field">
-          <label>Title</label>
-          <InputText v-model="submissionForm.title" />
-        </div>
-        <div class="field">
-          <label>Description</label>
-          <Textarea v-model="submissionForm.description" auto-resize />
-        </div>
-        <div class="field">
-          <label>Amount</label>
-          <InputNumber v-model="submissionForm.amount" mode="currency" currency="IDR" locale="id-ID" />
-        </div>
-        <div class="field">
-          <label>Category</label>
-          <Dropdown
-            v-model="submissionForm.category_id" :options="categoryStore.categories" option-label="name"
-            option-value="id" placeholder="Select a category"
-          />
-        </div>
-        <div class="field">
-          <label>Attachment</label>
-          <input type="file" class="p-inputtext-sm" @change="e => submissionForm.attachment = e.target.files[0]">
-        </div>
-
-        <div class="mt-4 flex gap-2 justify-end">
-          <Button label="Cancel" class="p-button-text" @click="isDialogVisible = false" />
-          <Button label="Submit" :loading="isSubmitting" @click="submitReimbursement" />
-        </div>
+    <Dialog v-model:visible="isDialogVisible" header="Submit Reimbursement" modal>
+      <div class="mb-4 flex gap-4 items-center">
+        <label class="font-semibold w-24">Title</label>
+        <InputText v-model="submissionForm.title" class="flex-auto" />
       </div>
-    </Dialog>
-
-    <Dialog v-model:visible="isDetailDialogVisible" header="Detail Reimbursement" modal class="w-1/3">
-      <div v-if="!reimbursementStore.isLoading && reimbursementStore.item" class="space-y-2">
-        <p><strong>Submitted by:</strong> {{ reimbursementStore.item?.user?.name ?? '-' }}</p>
-        <p><strong>Title:</strong> {{ reimbursementStore.item.title }}</p>
-        <p><strong>Description:</strong> {{ reimbursementStore.item.description }}</p>
-        <p><strong>Amount:</strong> {{ reimbursementStore.item.amount }}</p>
-        <p><strong>Category ID:</strong> {{ reimbursementStore.item.category_id }}</p>
-        <p><strong>Status:</strong> {{ reimbursementStore.item.status }}</p>
-        <p><strong>Approval Reason:</strong> {{ reimbursementStore.item.approval_reason ?? '-' }}</p>
-        <p><strong>Reviewed By:</strong> {{ reimbursementStore.item.reviewed_by?.name ?? '-' }}</p>
-        <p>
-          <strong>Attachment:</strong>
-          <Button
-            v-if="reimbursementStore.item.attachment_url"
-            variant="text"
-            severity="primary"
-            @click="openAttachmentDetailDialog(reimbursementStore.item.attachment_url)"
-          >
-            View Attachment
-          </Button>
-          <span v-else class="text-gray-500">No attachment</span>
-        </p>
-        <hr>
-        <Textarea
-          v-if="reimbursementStore.item.status === 'pending'" v-model="approvalReason"
-          placeholder="Type any reason (optional)" class="w-full"
+      <div class="mb-4 flex gap-4 items-center">
+        <label class="font-semibold w-24">Description</label>
+        <Textarea v-model="submissionForm.description" class="flex-auto" auto-resize />
+      </div>
+      <div class="mb-4 flex gap-4 items-center">
+        <label class="font-semibold w-24">Amount</label>
+        <InputNumber v-model="submissionForm.amount" class="flex-auto" mode="currency" currency="IDR" locale="id-ID" />
+      </div>
+      <div class="mb-4 flex gap-4 items-center">
+        <label class="font-semibold w-24">Category</label>
+        <Dropdown
+          v-model="submissionForm.category_id" class="flex-auto" :options="categoryStore.categories" option-label="name"
+          option-value="id" placeholder="Select a category"
         />
-        <div class="flex gap-x-2 items-center">
-          <template v-if="reimbursementStore.item.status === 'pending'">
+      </div>
+      <div class="mb-4 flex gap-4 items-center">
+        <label class="font-semibold w-24">Attachment</label>
+        <input type="file" class="p-inputtext-sm" @change="e => submissionForm.attachment = e.target.files[0]">
+      </div>
+
+      <div class="mt-4 flex gap-2 justify-end">
+        <Button label="Cancel" class="p-button-text" @click="isDialogVisible = false" />
+        <Button label="Submit" :loading="isSubmitting" @click="submitReimbursement" />
+      </div>
+    </Dialog>
+
+    <Dialog
+      v-model:visible="isDetailDialogVisible"
+      header="Detail Reimbursement"
+      modal
+      :style="{ width: '50rem' }"
+      class="mx-2"
+    >
+      <div v-if="!reimbursementStore.isLoading && reimbursementStore.item" class="space-y-4">
+        <!-- Submitted by -->
+        <div class="flex flex-col">
+          <label class="font-semibold w-32">Submitted by</label>
+          <span>{{ reimbursementStore.item.user?.name ?? '-' }}</span>
+        </div>
+
+        <!-- Title -->
+        <div class="flex flex-col">
+          <label class="font-semibold w-32">Title</label>
+          <span>{{ reimbursementStore.item.title }}</span>
+        </div>
+
+        <!-- Description -->
+        <div class="flex flex-col">
+          <label class="font-semibold pt-1 w-32">Description</label>
+          <span class="whitespace-pre-wrap">{{ reimbursementStore.item.description }}</span>
+        </div>
+
+        <!-- Amount -->
+        <div class="flex flex-col">
+          <label class="font-semibold w-32">Amount</label>
+          <span>{{ reimbursementStore.item.amount }}</span>
+        </div>
+
+        <!-- Category -->
+        <div class="flex flex-col">
+          <label class="font-semibold w-32">Category ID</label>
+          <span>{{ reimbursementStore.item.category_id }}</span>
+        </div>
+
+        <!-- Status -->
+        <div class="flex flex-col">
+          <label class="font-semibold w-32">Status</label>
+          <span>{{ reimbursementStore.item.status }}</span>
+        </div>
+
+        <!-- Approval Reason -->
+        <div class="flex flex-col">
+          <label class="font-semibold w-32">Approval Reason</label>
+          <span>{{ reimbursementStore.item.approval_reason ?? '-' }}</span>
+        </div>
+
+        <!-- Reviewed By -->
+        <div class="flex flex-col">
+          <label class="font-semibold w-32">Reviewed By</label>
+          <span>{{ reimbursementStore.item.reviewed_by?.name ?? '-' }}</span>
+        </div>
+
+        <!-- Attachment -->
+        <div class="flex flex-col">
+          <label class="font-semibold w-32">Attachment</label>
+          <div>
             <Button
-              v-if="authStore" label="Approve" icon="pi pi-check-circle" severity="success"
-              @click="approve(reimbursementStore.item.id)"
-            />
-            <Button
-              v-if="authStore" label="Reject" icon="pi pi-times-circle" severity="danger"
-              @click="reject(reimbursementStore.item.id)"
-            />
-          </template>
-          <template v-else>
-            <span
-              class="italic"
-              :class="reimbursementStore.item.status === 'approved' ? 'text-green-600' : 'text-red-600'"
+              v-if="reimbursementStore.item.attachment_url"
+              variant="text"
+              severity="primary"
+              @click="openAttachmentDetailDialog(reimbursementStore.item.attachment_url)"
             >
-              {{ reimbursementStore.item.status === 'approved' ? 'Already approved' : 'Already rejected' }}
-            </span>
-          </template>
+              View Attachment
+            </Button>
+            <span v-else class="text-gray-500">No attachment</span>
+          </div>
+        </div>
+
+        <hr>
+
+        <!-- Approval actions / status note -->
+        <div class="space-y-2">
+          <Textarea
+            v-if="reimbursementStore.item.status === 'pending'"
+            v-model="approvalReason"
+            placeholder="Type any reason (optional)"
+            class="w-full"
+            auto-resize
+          />
+
+          <div class="flex gap-2 items-center">
+            <template v-if="reimbursementStore.item.status === 'pending'">
+              <Button
+                v-if="authStore"
+                label="Approve"
+                icon="pi pi-check-circle"
+                severity="success"
+                @click="approve(reimbursementStore.item.id)"
+              />
+              <Button
+                v-if="authStore"
+                label="Reject"
+                icon="pi pi-times-circle"
+                severity="danger"
+                @click="reject(reimbursementStore.item.id)"
+              />
+            </template>
+            <template v-else>
+              <span
+                class="italic"
+                :class="{
+                  'text-green-600': reimbursementStore.item.status === 'approved',
+                  'text-red-600': reimbursementStore.item.status === 'rejected',
+                }"
+              >
+                {{ reimbursementStore.item.status === 'approved'
+                  ? 'Already approved'
+                  : 'Already rejected' }}
+              </span>
+            </template>
+          </div>
         </div>
       </div>
     </Dialog>
+
     <Dialog v-model:visible="isImageDialogVisible" modal header="Attachment" class="w-auto">
       <Image v-if="selectedImageUrl" :src="selectedImageUrl" alt="Image" width="250" />
     </Dialog>

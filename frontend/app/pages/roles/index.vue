@@ -199,7 +199,7 @@ async function submitPerms() {
       class="w-1/3"
     >
       <div class="p-fluid grid">
-        <div class="field col-12">
+        <div class="col-12 field">
           <label for="name">Name</label>
           <InputText id="name" v-model="form.name" />
         </div>
@@ -223,35 +223,35 @@ async function submitPerms() {
     <!-- Assign Permissions Dialog -->
     <Dialog
       v-model:visible="isPermsDialogVisible"
-      header="Assign Permissions"
       modal
-      class="w-1/3"
+      header="Assign Permissions"
+      :style="{ width: '25rem' }"
     >
-      <div class="p-fluid grid">
-        <div class="field col-12">
-          <label for="perms">Permissions</label>
-          <MultiSelect
-            id="perms"
-            v-model="form.permissions"
-            :options="allPermissions"
-            placeholder="Select permissions"
-            display="chip"
-          />
-        </div>
-        <div class="col-12 mt-4 flex gap-2 justify-end">
-          <Button
-            label="Cancel"
-            icon="pi pi-times"
-            class="p-button-text"
-            @click="closePermsDialog()"
-          />
-          <Button
-            label="Sync"
-            icon="pi pi-check"
-            :loading="store.isLoading"
-            @click="submitPerms()"
-          />
-        </div>
+      <div class="mb-4 flex gap-4 items-center">
+        <label for="perms">Permissions</label>
+        <MultiSelect
+          id="perms"
+          v-model="form.permissions"
+          :options="allPermissions"
+          placeholder="Select permissions"
+          class="multi-scroll w-full"
+          style="max-width: 200px;"
+          display="chip"
+        />
+      </div>
+      <div class="flex gap-2 justify-end">
+        <Button
+          label="Cancel"
+          icon="pi pi-times"
+          class="p-button-text"
+          @click="closePermsDialog()"
+        />
+        <Button
+          label="Sync"
+          icon="pi pi-check"
+          :loading="store.isLoading"
+          @click="submitPerms()"
+        />
       </div>
     </Dialog>
   </div>

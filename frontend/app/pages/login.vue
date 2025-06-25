@@ -7,9 +7,9 @@ definePageMeta({
 const { showSuccessMessage, showErrorMessage } = useMessages()
 const { addElement } = useFormKitSchema()
 const { t } = useI18n()
-const router = useRouter()
+// const router = useRouter()
 const horizontal = ref(false)
-const loading = ref(false)
+const isLoading = ref(false)
 const { credentials, login, errorMsg } = useLogin({
   credentials: {
     email: '',
@@ -38,12 +38,11 @@ const loginSchema = reactive([
 ])
 
 async function submitHandler() {
-  loading.value = true
+  isLoading.value = true
   try {
     await login()
     if (!errorMsg.value) {
       showSuccessMessage(t('welcome', 'Welcome'), t('login_success', 'Successfuly login'))
-      router.push('/')
     }
     else {
       showErrorMessage(errorMsg.value, '')
@@ -54,7 +53,7 @@ async function submitHandler() {
     showErrorMessage(error?.message, 'Something wrong')
   }
   finally {
-    loading.value = false
+    isLoading.value = false
   }
 }
 </script>
@@ -72,8 +71,10 @@ async function submitHandler() {
       <FormKitDataEdit
         :data="credentials"
         :schema="loginSchema"
-        :submit-label="t('login', 'Login')"
         :form-class="horizontal ? 'form-horizontal' : ''"
+        :submit-label="isLoading ? 'Loading...' : t('login', 'Login')"
+        :submit-icon="isLoading ? 'pi pi-spin pi-spinner' : ''"
+        submit-class="w-full"
         @data-saved="submitHandler"
       />
     </div>

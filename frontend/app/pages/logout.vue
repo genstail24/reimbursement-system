@@ -5,22 +5,27 @@ definePageMeta({
 })
 
 const { doLogout, errorMsg } = useLogout()
-const { showErrorMessage } = useMessages()
-const pending = ref(true)
-const router = useRouter()
+const { showErrorMessage, showSuccessMessage } = useMessages()
+const { t } = useI18n()
+const isLoading = ref(true)
+// const router = useRouter()
 
 async function logout() {
-  pending.value = true
+  isLoading.value = true
   try {
     await doLogout()
-    router.replace({ name: 'login' })
+    showSuccessMessage(
+      t('logout_success_title', 'Successfully logged out'),
+      t('logout_success_message', 'You have been safely signed out.'),
+    )
+    // router.replace({ name: 'login' })
   }
   catch (e: any) {
     if (e.message)
       showErrorMessage(e?.message || errorMsg || 'Error')
   }
   finally {
-    pending.value = false
+    isLoading.value = false
   }
 }
 
@@ -29,7 +34,7 @@ onMounted(logout)
 
 <template>
   <div class="bg-gray-100 flex h-screen items-center justify-center">
-    <div v-if="pending" class="text-center">
+    <div v-if="isLoading" class="text-center">
       <ProgressSpinner />
       <p>Trying to logout…</p>
     </div>
