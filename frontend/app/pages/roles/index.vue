@@ -184,7 +184,7 @@ async function submitPerms() {
       class="w-1/3"
     >
       <div class="p-fluid grid">
-        <div class="field col-12">
+        <div class="col-12 field">
           <label for="name">Name</label>
           <InputText id="name" v-model="form.name" />
         </div>
