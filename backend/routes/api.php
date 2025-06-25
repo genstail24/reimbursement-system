@@ -57,8 +57,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // /reimbursements
     Route::prefix('reimbursements')->group(function () {
-        Route::middleware('permission:reimbursement.view_all')->get('/', [ReimbursementController::class, 'index']);
-        Route::middleware('permission:reimbursement.view_single')->get('{reimbursement}', [ReimbursementController::class, 'show']);
+        Route::middleware('permission:reimbursement.view')->get('/', [ReimbursementController::class, 'index']);
+        Route::middleware('permission:reimbursement.view')->get('metrics', [ReimbursementController::class, 'metrics']);
+        Route::middleware('permission:reimbursement.view')->get('{reimbursement}', [ReimbursementController::class, 'show']);
         Route::middleware('permission:reimbursement.delete')->delete('{reimbursement}', [ReimbursementController::class, 'destroy']);
         Route::middleware('permission:reimbursement.create')->post('submission', [ReimbursementController::class, 'submission']);
         Route::middleware('permission:reimbursement.approve')->put('{reimbursement}/approval', [ReimbursementController::class, 'approval']);

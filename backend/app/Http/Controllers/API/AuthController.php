@@ -41,9 +41,7 @@ class AuthController extends Controller
         $userData['roles']       = $user->getRoleNames();
         $userData['permissions'] = $user->getAllPermissions()->pluck('name');
 
-        return $this->response()->success([
-            'user' => $userData,
-        ], 'Get logged in user');
+        return $this->response()->success($userData, 'Get logged in user');
     }
 
     public function logout(Request $request)

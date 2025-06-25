@@ -16,7 +16,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::all();
+        $users = User::with('roles')->get();
         return $this->response()->success($users, 'List user berhasil diambil');
     }
 
@@ -50,7 +50,9 @@ class UserController extends Controller
      * Display the specified resource.
      */
     public function show(User $user)
-    {
+    {   
+        $user->load('roles');
+
         return $this->response()->success($user, 'Detail user');
     }
 

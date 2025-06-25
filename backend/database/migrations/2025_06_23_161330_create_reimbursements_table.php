@@ -19,9 +19,11 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->float('amount', 11, 2);
             $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
+            $table->text('approval_reason')->nullable();
             $table->string('attachment_path')->nullable();
             $table->timestamp('submitted_at')->nullable();
             $table->timestamp('approved_at')->nullable();
+            $table->foreignId('reviewed_by')->nullable()->constrained('users')->nullOnDelete();
             $table->timestamps();
             $table->softDeletes();
         });

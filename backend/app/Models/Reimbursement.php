@@ -18,9 +18,11 @@ class Reimbursement extends Model
         'description',
         'amount',
         'status',
+        'approval_reason',
         'attachment_path',
         'submitted_at',
-        'approved_at'
+        'reviewed_by',
+        'approved_by',
     ];
 
     protected $casts = [
@@ -41,7 +43,7 @@ class Reimbursement extends Model
             return $this->attachment_path;
         }
 
-        return Storage::url($this->attachment_path);
+        return url(Storage::url($this->attachment_path));
     }
 
     public function user()
@@ -52,5 +54,10 @@ class Reimbursement extends Model
     public function category()
     {
         return $this->belongsTo(Category::class);
+    }
+
+    public function reviewedBy()
+    {
+        return $this->belongsTo(User::class, 'reviewed_by');
     }
 }
