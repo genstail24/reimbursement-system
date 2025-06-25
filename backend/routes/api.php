@@ -48,8 +48,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // /categories
     Route::prefix('categories')->group(function () {
-        Route::middleware('permission:category.view')->get('/', [CategoryController::class, 'index']);
-        Route::middleware('permission:category.view')->get('{category}', [CategoryController::class, 'show']);
+        Route::middleware('permission:category.view|reimbursement.create|reimbursement.view')->get('/', [CategoryController::class, 'index']);
+        Route::middleware('permission:category.view|reimbursement.create|reimbursement.view')->get('{category}', [CategoryController::class, 'show']);
         Route::middleware('permission:category.create')->post('/', [CategoryController::class, 'store']);
         Route::middleware('permission:category.update')->put('{category}', [CategoryController::class, 'update']);
         Route::middleware('permission:category.delete')->delete('{category}', [CategoryController::class, 'destroy']);
