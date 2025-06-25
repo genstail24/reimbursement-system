@@ -57,6 +57,8 @@ watch(() => reimbursementStore.isSuccess, (val) => {
     return reimbursementStore.getMessage && showSuccessMessage('Success', reimbursementStore.getMessage || 'Success')
 })
 
+const isAdmin = computed(() => !authStore.user.value?.roles?.includes('admin'))
+
 function resetForm() {
   submissionForm.title = ''
   submissionForm.description = ''
@@ -184,14 +186,20 @@ function getStatusSeverity(status: string) {
         </Column>
         <Column field="reviewed_by.name" header="Reviewed By" />
         <Column field="created_at" header="Submitted At" />
+        <Column field="deleted_at" header="Deleted At" :hidden="isAdmin"/>
         <Column header="Action">
           <template #body="{ data }">
-            <div class="flex justify-between">
-              <Button v-has-ability-to="'reimbursement.view'" icon="pi pi-eye" class="p-button-text p-button-sm" @click="openDetailDialog(data.id)" />
-              <Button
-                v-has-ability-to="'reimbursement.delete'" icon="pi pi-trash" class="p-button-text p-button-sm p-button-danger"
-                @click="deleteItem(data.id)"
-              />
+            <div class="w-full">
+              <div v-if="data.deleted_at" class="flex justify-between">
+                <Tag severity="danger" value="This item has been deleted"/>
+              </div>
+              <div v-else>
+                <Button v-has-ability-to="'reimbursement.view'" icon="pi pi-eye" class="p-button-text p-button-sm" @click="openDetailDialog(data.id)" />
+                <Button
+                  v-has-ability-to="'reimbursement.delete'" icon="pi pi-trash" class="p-button-text p-button-sm p-button-danger"
+                  @click="deleteItem(data.id)"
+                />
+              </div>
             </div>
           </template>
         </Column>

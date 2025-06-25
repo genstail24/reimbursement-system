@@ -27,7 +27,7 @@ export function useNavigationMenu() {
         title: 'Category',
         icon: 'pi pi-tags',
         href: '/categories',
-        permission: ['category.create'],
+        permission: ['category.view'],
       },
       {
         title: 'Activity Log',
@@ -39,7 +39,7 @@ export function useNavigationMenu() {
         title: 'User',
         icon: 'pi pi-user',
         href: '/users',
-        permission: ['user.create'],
+        permission: ['user.view'],
       },
       {
         title: 'Role',
