@@ -78,6 +78,15 @@ Before starting, ensure your system meets the following requirements:
 
 ---
 
+## Demo
+
+You can try the live demo here (accessible via browser):
+
+**[http://reimbursement.genstail24.my.id](http://reimbursement.genstail24.my.id)**  
+> **Note:** Make sure to use `http://` (not `https://`) as the site does not support HTTPS.
+
+---
+
 ## Setup & Deployment
 
 ### A. Manual Setup (Single Repository)
