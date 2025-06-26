@@ -207,6 +207,17 @@ cd reimbursement-system
 > **! Not Yet Implemented**
 > Monorepo structure using Lerna is still under development.
 
+### C. Troubleshooting
+
+If the app doesn't load properly or an error pops up at `http://localhost:3000`, try the following steps:
+
+- On Windows:
+    - Press **Ctrl + R** to refresh the page
+    - Or press **Ctrl + Shift + R** for a hard refresh (clear cache)
+- On Mac:
+  - Press **Cmd + R** to refresh
+  - Or **Cmd + Shift + R** for a hard refresh
+
 ---
 
 ## USER LOGIN

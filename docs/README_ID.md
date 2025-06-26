@@ -195,6 +195,17 @@ Monorepo (Lerna)
 > **! Belum Diimplementasikan**
 > Struktur monorepo dengan Lerna masih dalam tahap development.
 
+### C. Troubleshooting
+
+Jika halaman tidak muncul, tampak kosong, atau muncul error setelah membuka `http://localhost:3000`, coba lakukan langkah-langkah berikut:
+
+- Jika menggunakan windows:
+   - Tekan **Ctrl + R** untuk refresh halaman
+   - Atau tekan **Ctrl + Shift + R** untuk hard refresh (membersihkan cache)
+- Jika menggunakan Mac:
+  - Tekan **Cmd + R** untuk refresh
+  - Atau **Cmd + Shift + R** untuk hard refresh
+
 ---
 
 ## LOGIN PENGGUNA
