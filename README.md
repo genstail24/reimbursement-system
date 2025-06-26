@@ -209,6 +209,19 @@ cd reimbursement-system
 
 ---
 
+## USER LOGIN
+
+| Name           | Email                  | Password  | Role     |
+|----------------|------------------------|-----------|----------|
+| Admin          | admin@example.com      | password  | admin    |
+| Manager One    | manager@example.com    | password  | manager  |
+| Manager Two    | managerTwo@example.com | password  | manager  |
+| Employee One   | employee1@example.com  | password  | employee |
+| Employee Two   | employee2@example.com  | password  | employee |
+| Employee Three | employee3@example.com  | password  | employee |
+
+---
+
 ## API Documentation
 
 * **Postman Collection**: [docs/Reimbursement_API_Collection.postman_collection](docs/Reimbursement_API_Collection.postman_collection) (import this into Postman to test endpoints)
