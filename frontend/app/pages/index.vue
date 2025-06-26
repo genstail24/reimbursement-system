@@ -26,12 +26,11 @@ onMounted(async () => {
   try {
     const { data } = await auth.$fetch('/reimbursements/metrics')
     metrics.value = data
-  }
-  catch (err: any) {
-    const msg
-      = err.response?.data?.message
-        || err.message
-        || 'Gagal memuat metrik reimbursement'
+  } catch (err: any) {
+    const msg =
+      err.response?.data?.message ||
+      err.message ||
+      'Failed to load reimbursement metrics'
     showErrorMessage(msg, '')
   }
 })
@@ -50,26 +49,26 @@ function formatIDR(val: number) {
       Reimbursement <span class="text-green-600">Dashboard</span>
     </div>
     <h2 class="text-2xl pb-6">
-      Ringkasan cepat status reimbursement kamu
+      A quick summary of your reimbursement status
     </h2>
     <div class="px-4 gap-4 grid grid-cols-2 lg:grid-cols-5 md:grid-cols-3">
       <AdvertiseBox
         header="Total Requests" :icon="metrics.totalRequests > 0 ? 'pi pi-list' : 'pi pi-list'"
         color="blue-500"
       >
-        {{ metrics.totalRequests }} request
+        {{ metrics.totalRequests }} requests
       </AdvertiseBox>
 
       <AdvertiseBox header="Pending" icon="pi pi-clock" color="yellow-500">
-        {{ metrics.pending }} menunggu
+        {{ metrics.pending }} pending
       </AdvertiseBox>
 
       <AdvertiseBox header="Approved" icon="pi pi-check-circle" color="green-600">
-        {{ metrics.approved }} disetujui
+        {{ metrics.approved }} approved
       </AdvertiseBox>
 
       <AdvertiseBox header="Rejected" icon="pi pi-times-circle" color="red-600">
-        {{ metrics.rejected }} ditolak
+        {{ metrics.rejected }} rejected
       </AdvertiseBox>
 
       <AdvertiseBox header="Total Reimbursed" icon="pi pi-wallet" color="purple-500">
