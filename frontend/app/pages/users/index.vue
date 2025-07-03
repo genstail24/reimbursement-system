@@ -201,7 +201,7 @@ async function submitForm() {
           <Password
             id="password"
             v-model="formModel.password"
-            feedback="false"
+            :feedback="false"
           />
         </div>
         <div v-if="!isEditing" class="field col-12">
@@ -209,7 +209,7 @@ async function submitForm() {
           <Password
             id="password_confirmation"
             v-model="formModel.password_confirmation"
-            feedback="false"
+            :feedback="false"
           />
         </div>
 

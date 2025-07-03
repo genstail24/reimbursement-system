@@ -1,6 +1,6 @@
 // types/User.ts
 export interface User {
-  id: number
+  id?: number | null
   name: string
   email: string
   roles: string[]
@@ -17,7 +17,7 @@ export interface CreateUserPayload {
 }
 
 export interface UpdateUserPayload {
-  id: number
+  id?: number | null
   name?: string
   email?: string
 }

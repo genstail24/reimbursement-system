@@ -43,7 +43,7 @@ export const useUserStore = defineStore('user', {
         this.users = res.data || []
         this.users = res.data && res.data.map(item => ({
           ...item,
-          roles: item.roles.map(role => role?.name || ''),
+          roles: item.roles.map(role => role || ''),
         }))
         this.success = true
         this.message = ''
